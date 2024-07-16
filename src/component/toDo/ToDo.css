@@ -1,0 +1,25 @@
+.header-1 {
+    color: #000000;
+}
+
+.list__container {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    margin-bottom: 48px;
+
+}
+.wellBeingToDo {
+    animation: 1s wellBeingToDo;
+  }
+
+@keyframes wellBeingToDo {
+    from {
+        margin-left: 100%;
+      }
+      to {
+        margin-left: 0%;
+      }
+}
+
+

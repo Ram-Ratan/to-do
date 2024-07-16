@@ -1,0 +1,68 @@
+.submit__button {
+    width: 51px;
+    height: 51px;
+    border-radius: 51px;
+    background-color: #D9D9D9;
+    cursor: pointer;
+    border: 2px solid #000000;
+}
+
+.formClass {
+    align-items: center;
+    justify-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.input__box {
+    width: 370px;
+    height: 62px;
+    border-radius: 20px;
+    position: relative;
+    padding-left: 60px;
+    background-color: #D9D9D9;
+    border: 2px solid #000000;
+    align-content: center;
+}
+
+.input__box, .input__box_2 {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 40.16px;
+}
+
+.input__box_2 {
+    width: 324px;
+    height: 53px;
+    border-radius: 20px;
+    position: relative;
+    padding-left: 60px;
+    background-color:#FFC3C3;
+    border: 2px solid #FF0000;
+    align-content: center;
+}
+
+.radio__button {
+    position: absolute;
+    left: 8px;
+    top: 16px;
+    width: 28px;
+    height: 28px;
+    accent-color: #000000;
+    cursor: pointer;
+}
+
+.radio__button:checked {
+    accent-color: #000000;
+}
+
+.radio__button_2 {
+    position: absolute;
+    right: 8px;
+    top: 16px;
+    width: 20px;
+    height: 20px;
+    accent-color: #FF0000;
+    cursor: pointer;
+}
