@@ -143,7 +143,7 @@ const ToDo: React.FC = () => {
             <div
               style={{
                 position: "absolute",
-                left: "55px",
+                left: "46px",
                 top: "46px",
               }}
               className="wellBeingToDo"

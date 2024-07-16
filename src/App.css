@@ -10,6 +10,7 @@
   align-items: center;
   padding-bottom: 10%;
   font-family: "Kadwa";
+  padding: 0 10% 30px 30px;
 }
 
 .graphic-1 {
@@ -18,10 +19,16 @@
   padding-top: 5%;
 }
 
+@media only screen and (max-width: 600px) {
+  .graphic-1{
+    width: 163px;
+    height: 197px;
+  }
+}
+
 .description {
   text-align: center;
   color:  #FF0000;
-  ;
 }
 
 
