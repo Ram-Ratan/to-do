@@ -38,7 +38,7 @@ const App: React.FC = () => {
       </div>
       {isInfo && (
         <div className="popUp">
-          <p>Welcome to Grandma TEYA's To Do List Creator.</p>
+          <p>Welcome to Grandma <span style={{fontWeight: "700"}}>TEYA's To Do List Creator</span>.</p>
           {/* <div onClick={() => setIsInfo(false)} style={{
             position: 'absolute',
             top: "18px",
