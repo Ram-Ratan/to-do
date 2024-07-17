@@ -37,7 +37,8 @@
     height: 49px;
     border-radius: 20px;
     position: relative;
-    padding-left: 60px;
+    padding-left: 10px;
+    padding-right: 50px;
     background-color:#FFC3C3;
     border: 2px solid #FF0000;
     align-content: center;
@@ -73,6 +74,10 @@
     }
     .input__box_2{
         width: 214px;
+    }
+    .input__box, .input__box_2 {
+        font-size: 16px;
+        line-height: 32px;
     }
 
   }
