@@ -129,6 +129,7 @@ const ToDo: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [toDoList, setToDoList] = useState<ToDoI[]>([]);
   const [isAdd, setIsAdd] = useState<boolean>(false);
+  const [animatingId, setAnimatingId] = useState<string | null>(null);
   console.log(toDoList);
 
   const handleAddToDo = (e: React.FormEvent) => {
@@ -150,7 +151,20 @@ const ToDo: React.FC = () => {
   };
 
   const handleCheck = (id: string): void => {
-    setToDoList(toDoList?.filter((todo) => todo?.id !== id));
+    setAnimatingId(id);
+    setToDoList(toDoList?.map((todo)=> {
+      if(todo.id === id){
+        return {
+          ...todo,
+          isDone: true
+        }
+      }else{
+        return todo;
+      }
+    }))
+    setTimeout(()=>{
+      setToDoList(toDoList?.filter((todo) => todo?.id !== id));
+    },300)
   };
 
   const handleRadioChange = (toDo: ToDoI): void => {
@@ -194,7 +208,7 @@ const ToDo: React.FC = () => {
       <h1 className="header-1">Create Your To Do List</h1>
       <div className="list__container">
         {toDoList?.map((toDo, key) => (
-          <div style={{ position: "relative" }}>
+          <div style={{ position: "relative" }} className={`todo-item ${animatingId === toDo.id ? "fade-out" : ""}`}>
             <div className="input__box">{toDo.label}</div>
             <CustomToggle isChecked={toDo.isDone} onClickToggle={()=>{
               if (toDo?.isWellBeingDone || toDo.wellBeingTodo.isClickable) {
