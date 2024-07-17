@@ -39,14 +39,14 @@ const App: React.FC = () => {
       {isInfo && (
         <div className="popUp">
           <p>Welcome to Grandma TEYA's To Do List Creator.</p>
-          <div onClick={() => setIsInfo(false)} style={{
+          {/* <div onClick={() => setIsInfo(false)} style={{
             position: 'absolute',
             top: "18px",
             right: "18px",
             cursor: 'pointer'
           }}>
             <img src={closeImage} alt="close" width={"20px"} height={"20px"}/>
-          </div>
+          </div> */}
           <p>
             This is a fun To-Do list app for TEYA's release “To-Do List”. Add a
             To-Do that you need to get done and an automatic wellbeing “Anti
