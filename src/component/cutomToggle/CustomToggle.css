@@ -1,0 +1,43 @@
+.outer__circle {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #FF0000;
+    border-radius: 50%;
+    position: absolute;
+    right: 8px;
+    top: 16px;
+    cursor: pointer;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inner__circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #FF0000;
+}
+
+.outer__circle_1 {
+    width: 19px;
+    height: 19px;
+    border: 2px solid #000000;
+    border-radius: 50%;
+    position: absolute;
+    left: 8px;
+    top: 19.5px;
+    cursor: pointer;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inner__circle_1 {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #000000;
+}

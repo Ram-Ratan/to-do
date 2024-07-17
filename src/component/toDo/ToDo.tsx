@@ -1,72 +1,128 @@
 import React, { useState } from "react";
 import InputField from "../inputFiled/InputField";
 import "./ToDo.css";
+import Triangle from "../../assets/triangle";
+import CustomToggle from "../cutomToggle/CustomToggle";
 export interface ToDoI {
   id: string;
   label: string;
   isDone: boolean;
-  wellBeingTodo: string;
+  wellBeingTodo: WellBeingTodo;
   isWellBeingDone: boolean;
 }
 
+type WellBeingTodo = {
+  label: string;
+  isClickable: boolean;
+  url: string | undefined;
+};
 
-
-
-
-
-
-
-
-const wellBeingTodo: string[] = [
-  "Read a book",
-  "Call a friend",
-  "Write a journal",
-  "Take a walk",
-  "Meditate for ten",
-  "Plant a tree",
-  "Clean your room",
-  "Bake some cookies",
-  "Exercise for thirty",
-  "Learn a recipe",
-  "Paint a picture",
-  "Watch a documentary",
-  "Try a puzzle",
-  "Donate old clothes",
-  "Listen to music",
-  "Volunteer your time",
-  "Water the plants",
-  "Organize your desk",
-  "Send a postcard",
-  "Cook a meal",
-  "Visit a park",
-  "Practice gratitude",
-  "Dance to music",
-  "Declutter a drawer",
-  "Write a poem",
-  "Do a workout",
-  "Watch a sunrise",
-  "Make a scrapbook",
-  "Call your family",
-  "Play a game",
-  "Learn a skill",
-  "Start a hobby",
-  "Clean your car",
-  "Practice deep breathing",
-  "Compliment someone",
-  "Try a craft",
-  "Plan a trip",
-  "Update your resume",
-  "Do yoga stretches",
-  "Make a playlist",
-  "Read an article",
-  "Cook a new dish",
-  "Try a podcast",
-  "Feed the birds",
-  "Explore your town",
-  "Take photos",
-  "Plan your week",
-  "Write a letter",
-  "Go for a jog",
+const wellBeingTodo: WellBeingTodo[] = [
+  {
+    label: 'Listen to "To-Do" List',
+    isClickable: true,
+    url: "https://lnk.cloudkid.com/todolist",
+  },
+  {
+    label: "Go for a walk",
+    isClickable: false,
+    url: undefined,
+  },
+  {
+    label: "Sip a drink by the poolside",
+    isClickable: false,
+    url: undefined,
+  },
+  {
+    label: "Read a book",
+    isClickable: false,
+    url: undefined,
+  },
+  {
+    label: "1h of me time",
+    isClickable: false,
+    url: undefined,
+  },
+  {
+    label: "Book a vacation",
+    isClickable: false,
+    url: undefined,
+  },
+  {
+    label: "Go skinny dipping",
+    isClickable: false,
+    url: undefined,
+  },
+  {
+    label: "Drink a cup of tea",
+    isClickable: false,
+    url: undefined,
+  },
+  {
+    label: "Follow TEYA on Instagram",
+    isClickable: true,
+    url: "https://www.instagram.com/whothehellisteya/",
+  },
+  {
+    label: "Follow TEYA on TikTok",
+    isClickable: true,
+    url: "https://www.tiktok.com/@whothehellisteya",
+  },
+  {
+    label: "Follow TEYA on TikTok",
+    isClickable: true,
+    url: "https://www.tiktok.com/@whothehellisteya",
+  },
+  {
+    label: "Cook a healthy meal",
+    isClickable: false,
+    url: undefined,
+  },
+  {
+    label: "Play 4 in a Row",
+    isClickable: false,
+    url: undefined,
+  },
+  {
+    label: "Light a Yankee Candle",
+    isClickable: false,
+    url: undefined,
+  },
+  {
+    label: "Check out TEYA’s Boutique",
+    isClickable: true,
+    url: "https://whothehellisteya.allelon.shop/",
+  },
+  {
+    label: "Dance to your favorite song",
+    isClickable: false,
+    url: undefined,
+  },
+  {
+    label: "Message a loved one",
+    isClickable: false,
+    url: undefined,
+  },
+  {
+    label: "Do a puzzle",
+    isClickable: false,
+    url: undefined,
+  },
+  {
+    label: "Meditate",
+    isClickable: false,
+    url: undefined,
+  },
+  {
+    label: "Stretch",
+    isClickable: false,
+    url: undefined,
+  },
+  {
+    label: "Take a bath",
+    isClickable: false,
+    url: undefined,
+  },
 ];
 
 const ToDo: React.FC = () => {
@@ -84,7 +140,7 @@ const ToDo: React.FC = () => {
           id: Date.now().toString(),
           label: inputValue,
           isDone: false,
-          wellBeingTodo: wellBeingTodo[Math.floor(Math.random() * 49)],
+          wellBeingTodo: wellBeingTodo[Math.floor(Math.random() * 21)],
           isWellBeingDone: false,
         },
       ]);
@@ -110,17 +166,28 @@ const ToDo: React.FC = () => {
 
   const renderToggle = (toDo: ToDoI): JSX.Element => {
     return (
-      <input
-        id={`${toDo.id}`}
-        key={toDo.id}
-        type="radio"
-        value={toDo?.isWellBeingDone ? "1" : "0"}
-        checked={toDo?.isWellBeingDone}
-        className="radio__button_2"
-        onClick={() => handleRadioChange(toDo)}
-      ></input>
+      <>
+        {toDo?.wellBeingTodo?.isClickable ? (
+          <div
+            style={{
+              position: "absolute",
+              right: "8px",
+              top: "16px",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              window.open(toDo.wellBeingTodo.url, "_blank");
+            }}
+          >
+            <Triangle />
+          </div>
+        ) : (
+          <CustomToggle isChecked = {toDo.isWellBeingDone} onClickToggle = {()=> handleRadioChange(toDo)} variant={"small"}/>
+        )}
+      </>
     );
   };
+  console.log(wellBeingTodo?.length);
 
   return (
     <div>
@@ -129,17 +196,11 @@ const ToDo: React.FC = () => {
         {toDoList?.map((toDo, key) => (
           <div style={{ position: "relative" }}>
             <div className="input__box">{toDo.label}</div>
-            <input
-              id="to-do-check"
-              checked={toDo.isDone}
-              type="radio"
-              className="radio__button"
-              onChange={() => {
-                if (toDo?.isWellBeingDone) {
-                  handleCheck(toDo?.id);
-                }
-              }}
-            ></input>
+            <CustomToggle isChecked={toDo.isDone} onClickToggle={()=>{
+              if (toDo?.isWellBeingDone || toDo.wellBeingTodo.isClickable) {
+                handleCheck(toDo?.id);
+              }
+            }} variant={"big"} />
             <div
               style={{
                 position: "absolute",
@@ -149,7 +210,7 @@ const ToDo: React.FC = () => {
               className="wellBeingToDo"
             >
               <div style={{ position: "relative" }}>
-                <div className="input__box_2">{toDo.wellBeingTodo}</div>
+                <div className="input__box_2">{toDo.wellBeingTodo.label}</div>
                 {renderToggle(toDo)}
               </div>
             </div>
@@ -161,7 +222,7 @@ const ToDo: React.FC = () => {
         setValue={setInputValue}
         handleAdd={handleAddToDo}
         handleCheck={handleCheck}
-        isAdd = {isAdd}
+        isAdd={isAdd}
         setIsAdd={setIsAdd}
       />
     </div>

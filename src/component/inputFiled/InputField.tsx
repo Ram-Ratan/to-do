@@ -1,5 +1,6 @@
 import React from "react";
 import "./InputField.css";
+import CustomToggle from "../cutomToggle/CustomToggle";
 interface Props {
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
@@ -28,7 +29,7 @@ const InputField: React.FC<Props> = ({
             value={value}
             onChange={(e) => setValue(e.target.value)}
           ></input>
-          <input type="radio" className="radio__button" disabled={true}></input>
+          <CustomToggle isChecked={false} onClickToggle={()=> {}} variant={"big"}/>
         </div>
       )}
       <button type="submit" className="submit__button" onClick={()=> setIsAdd(true)}>
