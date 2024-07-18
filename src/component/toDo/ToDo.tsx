@@ -230,7 +230,7 @@ const ToDo: React.FC = () => {
             <CustomToggle
               isChecked={toDo.isDone}
               onClickToggle={() => {
-                if (toDo?.isWellBeingDone || toDo.wellBeingTodo.isClickable) {
+                if (toDo?.isWellBeingDone) {
                   handleCheck(toDo?.id);
                 }
               }}

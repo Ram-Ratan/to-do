@@ -18,20 +18,7 @@ const App: React.FC = () => {
       </p>
       <ToDo />
       <div
-        style={{
-          width: "19px",
-          height: "19px",
-          borderRadius: "50%",
-          border: "2px solid #FF0000",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          color: "#FF0000",
-          position: "absolute",
-          right: "20px",
-          top: "20px",
-          cursor: "pointer",
-        }}
+        className="icon__style"
         onClick={() => setIsInfo(!isInfo)}
       >
         {isInfo ? "x" : "i"}

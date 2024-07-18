@@ -16,7 +16,7 @@
 .popUp {
   position: absolute;
   top: 50px;
-  right: 20px;
+  right: 30%;
   width: 371px;
   background: #d9d9d9;
   border: 2px solid #ff0000;
@@ -66,10 +66,32 @@
   padding-top: 5%;
 }
 
+.icon__style {
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  border: 2px solid #FF0000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #FF0000;
+  position: absolute;
+  right: 30%;
+  top: 20px;
+  cursor: pointer;
+}
+
 @media only screen and (max-width: 600px) {
   .graphic-1 {
     width: 163px;
     height: 197px;
+  }
+  .icon__style{
+    right: 20px;
+    top: 20px;
+  }
+  .popUp {
+    right: 20px;
   }
 }
 
