@@ -152,19 +152,21 @@ const ToDo: React.FC = () => {
 
   const handleCheck = (id: string): void => {
     setAnimatingId(id);
-    setToDoList(toDoList?.map((todo)=> {
-      if(todo.id === id){
-        return {
-          ...todo,
-          isDone: true
+    setToDoList(
+      toDoList?.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            isDone: true,
+          };
+        } else {
+          return todo;
         }
-      }else{
-        return todo;
-      }
-    }))
-    setTimeout(()=>{
+      })
+    );
+    setTimeout(() => {
       setToDoList(toDoList?.filter((todo) => todo?.id !== id));
-    },300)
+    }, 300);
   };
 
   const handleRadioChange = (toDo: ToDoI): void => {
@@ -193,10 +195,22 @@ const ToDo: React.FC = () => {
               window.open(toDo.wellBeingTodo.url, "_blank");
             }}
           >
-            <Triangle />
+            <div style={{ position: "relative" }} onClick={()=> handleRadioChange(toDo)}>
+              <Triangle />
+              {toDo.isWellBeingDone && (
+                <div
+                  className="triangle"
+                  style={{ position: "absolute", left: "3.8px", top: "6.5px" }}
+                ></div>
+              )}
+            </div>
           </div>
         ) : (
-          <CustomToggle isChecked = {toDo.isWellBeingDone} onClickToggle = {()=> handleRadioChange(toDo)} variant={"small"}/>
+          <CustomToggle
+            isChecked={toDo.isWellBeingDone}
+            onClickToggle={() => handleRadioChange(toDo)}
+            variant={"small"}
+          />
         )}
       </>
     );
@@ -208,13 +222,20 @@ const ToDo: React.FC = () => {
       <h1 className="header-1">Create Your To Do List</h1>
       <div className="list__container">
         {toDoList?.map((toDo, key) => (
-          <div style={{ position: "relative" }} className={`todo-item ${animatingId === toDo.id ? "fade-out" : ""}`}>
+          <div
+            style={{ position: "relative" }}
+            className={`todo-item ${animatingId === toDo.id ? "fade-out" : ""}`}
+          >
             <div className="input__box">{toDo.label}</div>
-            <CustomToggle isChecked={toDo.isDone} onClickToggle={()=>{
-              if (toDo?.isWellBeingDone || toDo.wellBeingTodo.isClickable) {
-                handleCheck(toDo?.id);
-              }
-            }} variant={"big"} />
+            <CustomToggle
+              isChecked={toDo.isDone}
+              onClickToggle={() => {
+                if (toDo?.isWellBeingDone || toDo.wellBeingTodo.isClickable) {
+                  handleCheck(toDo?.id);
+                }
+              }}
+              variant={"big"}
+            />
             <div
               style={{
                 position: "absolute",
