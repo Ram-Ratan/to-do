@@ -34,7 +34,7 @@ const InputField: React.FC<Props> = ({
       )}
       <button type="submit" className="submit__button" onClick={()=> setIsAdd(true)}>
         {" "}
-        <span style={{ fontSize: "40px" }}>+</span>{" "}
+        <span style={{ fontSize: "40px", color: "#000000" }}>+</span>{" "}
       </button>
     </form>
   );

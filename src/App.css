@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Kadwa:wght@400;700&display=swap");
 .App {
+  -webkit-flex-direction: column; /* Safari 6.1+ */
+  -ms-flex-direction: column; /* IE 10 */
   background-color: #edd7d7;
   width: auto;
   min-height: 100vh;
