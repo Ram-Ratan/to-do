@@ -44,6 +44,28 @@
   }
 }
 
+@keyframes quickWobble {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.quick-wobble {
+  animation: quickWobble 0.5s ease-in-out;
+}
+
 @media only screen and (max-width: 460px) {
   .header-1 {
     font-size: 1.5em;

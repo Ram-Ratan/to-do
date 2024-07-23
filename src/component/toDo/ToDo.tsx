@@ -130,6 +130,7 @@ const ToDo: React.FC = () => {
   const [toDoList, setToDoList] = useState<ToDoI[]>([]);
   const [isAdd, setIsAdd] = useState<boolean>(false);
   const [animatingId, setAnimatingId] = useState<string | null>(null);
+  const [wobbleId, setWobbleId] = useState<string | null>(null);
   console.log(toDoList);
 
   const handleAddToDo = (e: React.FormEvent) => {
@@ -151,26 +152,31 @@ const ToDo: React.FC = () => {
   };
 
   const handleCheck = (id: string): void => {
-    setAnimatingId(id);
-    setToDoList(
-      toDoList?.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            isDone: true,
-          };
-        } else {
-          return todo;
-        }
-      })
-    );
-    setTimeout(() => {
-      setToDoList(toDoList?.filter((todo) => todo?.id !== id));
-    }, 300);
+    const toDo = toDoList.find((todo) => todo.id === id);
+    if (toDo && !toDo.isWellBeingDone) {
+      setWobbleId(id);
+      setTimeout(() => setWobbleId(null), 500); // Remove wobble effect after animation
+    } else {
+      setAnimatingId(id);
+      setToDoList(
+        toDoList?.map((todo) => {
+          if (todo.id === id) {
+            return {
+              ...todo,
+              isDone: true,
+            };
+          } else {
+            return todo;
+          }
+        })
+      );
+      setTimeout(() => {
+        setToDoList(toDoList?.filter((todo) => todo?.id !== id));
+      }, 300);
+    }
   };
 
   const handleRadioChange = (toDo: ToDoI): void => {
-    console.log("onchange called");
     setToDoList(
       toDoList.map((todoItem) =>
         todoItem.id === toDo.id
@@ -183,39 +189,14 @@ const ToDo: React.FC = () => {
   const renderToggle = (toDo: ToDoI): JSX.Element => {
     return (
       <>
-        {toDo?.wellBeingTodo?.isClickable ? (
-          <div
-            style={{
-              position: "absolute",
-              right: "8px",
-              top: "16px",
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              window.open(toDo.wellBeingTodo.url, "_blank");
-            }}
-          >
-            <div style={{ position: "relative" }} onClick={()=> handleRadioChange(toDo)}>
-              <Triangle />
-              {toDo.isWellBeingDone && (
-                <div
-                  className="triangle"
-                  style={{ position: "absolute", left: "3.8px", top: "6.5px" }}
-                ></div>
-              )}
-            </div>
-          </div>
-        ) : (
-          <CustomToggle
-            isChecked={toDo.isWellBeingDone}
-            onClickToggle={() => handleRadioChange(toDo)}
-            variant={"small"}
-          />
-        )}
+        <CustomToggle
+          isChecked={toDo.isWellBeingDone}
+          onClickToggle={() => handleRadioChange(toDo)}
+          variant={"small"}
+        />
       </>
     );
   };
-  console.log(wellBeingTodo?.length);
 
   return (
     <div>
@@ -230,9 +211,7 @@ const ToDo: React.FC = () => {
             <CustomToggle
               isChecked={toDo.isDone}
               onClickToggle={() => {
-                if (toDo?.isWellBeingDone) {
-                  handleCheck(toDo?.id);
-                }
+                handleCheck(toDo?.id);
               }}
               variant={"big"}
             />
@@ -244,8 +223,28 @@ const ToDo: React.FC = () => {
               }}
               className="wellBeingToDo"
             >
-              <div style={{ position: "relative" }}>
-                <div className="input__box_2">{toDo.wellBeingTodo.label}</div>
+              <div
+                style={{ position: "relative" }}
+                className={wobbleId === toDo.id ? "quick-wobble" : ""}
+              >
+                <div
+                  className="input__box_2"
+                  style={{
+                    textDecoration: `${
+                      toDo.wellBeingTodo.isClickable ? "underline" : ""
+                    }`,
+                    cursor: `${
+                      toDo.wellBeingTodo.isClickable ? "pointer" : ""
+                    }`,
+                  }}
+                  onClick={() => {
+                    if (toDo.wellBeingTodo.isClickable) {
+                      window.open(toDo.wellBeingTodo.url, "_blank");
+                    }
+                  }}
+                >
+                  {toDo.wellBeingTodo.label}
+                </div>
                 {renderToggle(toDo)}
               </div>
             </div>

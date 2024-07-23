@@ -41,8 +41,8 @@ const App: React.FC = () => {
             you to get things done, but also look out for your mental health and
             wellbeing.
           </p>
-          <p className="underline" onClick={()=> {window.open("https://lnk.cloudkid.com/todolist", "_blank")}}>Listen to To-Do List</p>
-          <p className="underline" onClick={()=>{window.open("https://linktr.ee/whothehellisteya", "_blank")}}>Follow Teya</p>
+          <p className="underline" style={{fontWeight: '700'}} onClick={()=> {window.open("https://lnk.cloudkid.com/todolist", "_blank")}}>Listen to To-Do List</p>
+          <p className="underline" style={{fontWeight: '700'}} onClick={()=>{window.open("https://linktr.ee/whothehellisteya", "_blank")}}>Follow Teya</p>
         </div>
       )}
     </div>
