@@ -7,8 +7,7 @@ export interface ToDoI {
   id: string;
   label: string;
   isDone: boolean;
-  wellBeingTodo: WellBeingTodo;
-  isWellBeingDone: boolean;
+  wellBeingTodo: WellBeingTodo| undefined;
 }
 
 type WellBeingTodo = {
@@ -129,21 +128,36 @@ const ToDo: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [toDoList, setToDoList] = useState<ToDoI[]>([]);
   const [isAdd, setIsAdd] = useState<boolean>(false);
-  const [animatingId, setAnimatingId] = useState<string | null>(null);
+  const [animatingId, setAnimatingId] = useState<string | null>(null)
+  const [wellbeingToDoAnimatingId, setWellbeingToDoAnimatingId] = useState<string | null>(null);
   const [wobbleId, setWobbleId] = useState<string | null>(null);
+  const [usedWellBeingTodos, setUsedWellBeingTodos] = useState<WellBeingTodo[]>([]);
   console.log(toDoList);
+
+  const getAvailableWellBeingTodos = () => {
+    const usedLabels = toDoList.map(todo => todo.wellBeingTodo?.label)?.filter((i)=> i!==null);
+    const unusedTodos = wellBeingTodo.filter(todo => !usedLabels.includes(todo.label));
+    
+    if (unusedTodos.length === 0) {
+      setUsedWellBeingTodos([]);
+      return wellBeingTodo;
+    }
+    
+    return unusedTodos;
+  };
 
   const handleAddToDo = (e: React.FormEvent) => {
     e.preventDefault();
     if (inputValue) {
+      const availableWellBeingTodos = getAvailableWellBeingTodos();
+      const randomWellBeingTodo = availableWellBeingTodos[Math.floor(Math.random() * availableWellBeingTodos.length)];
       setToDoList([
         ...toDoList,
         {
           id: Date.now().toString(),
           label: inputValue,
           isDone: false,
-          wellBeingTodo: wellBeingTodo[Math.floor(Math.random() * 21)],
-          isWellBeingDone: false,
+          wellBeingTodo: randomWellBeingTodo,
         },
       ]);
       setInputValue("");
@@ -153,7 +167,7 @@ const ToDo: React.FC = () => {
 
   const handleCheck = (id: string): void => {
     const toDo = toDoList.find((todo) => todo.id === id);
-    if (toDo && !toDo.isWellBeingDone) {
+    if (toDo && toDo?.wellBeingTodo) {
       setWobbleId(id);
       setTimeout(() => setWobbleId(null), 500); // Remove wobble effect after animation
     } else {
@@ -177,20 +191,24 @@ const ToDo: React.FC = () => {
   };
 
   const handleRadioChange = (toDo: ToDoI): void => {
-    setToDoList(
-      toDoList.map((todoItem) =>
-        todoItem.id === toDo.id
-          ? { ...todoItem, isWellBeingDone: !todoItem.isWellBeingDone }
-          : todoItem
-      )
-    );
+    setWellbeingToDoAnimatingId(toDo.id);
+    setTimeout(()=>{
+      setToDoList(
+        toDoList.map((todoItem) =>
+          todoItem.id === toDo.id
+            ? { ...todoItem, wellBeingTodo: undefined }
+            : todoItem
+        )
+      );
+    }, 300)
   };
+
 
   const renderToggle = (toDo: ToDoI): JSX.Element => {
     return (
       <>
         <CustomToggle
-          isChecked={toDo.isWellBeingDone}
+          isChecked={wellbeingToDoAnimatingId === toDo.id}
           onClickToggle={() => handleRadioChange(toDo)}
           variant={"small"}
         />
@@ -202,10 +220,11 @@ const ToDo: React.FC = () => {
     <div>
       <h1 className="header-1">Create Your To Do List</h1>
       <div className="list__container">
-        {toDoList?.map((toDo, key) => (
+        {toDoList?.map((toDo) => (
           <div
             style={{ position: "relative" }}
-            className={`todo-item ${animatingId === toDo.id ? "fade-out" : ""}`}
+            className={`todo-item ${animatingId === toDo.id ? "fade-out-main" : ""}`}
+            key={toDo.id}
           >
             <div className="input__box">{toDo.label}</div>
             <CustomToggle
@@ -215,13 +234,14 @@ const ToDo: React.FC = () => {
               }}
               variant={"big"}
             />
-            <div
+            {toDo.wellBeingTodo && (
+              <div
               style={{
                 position: "absolute",
                 left: "46px",
                 top: "46px",
               }}
-              className="wellBeingToDo"
+              className={`wellBeingToDo ${wellbeingToDoAnimatingId === toDo.id? "fade-out-wellbeing":""}`}
             >
               <div
                 style={{ position: "relative" }}
@@ -231,23 +251,24 @@ const ToDo: React.FC = () => {
                   className="input__box_2"
                   style={{
                     textDecoration: `${
-                      toDo.wellBeingTodo.isClickable ? "underline" : ""
+                      toDo?.wellBeingTodo?.isClickable ? "underline" : ""
                     }`,
                     cursor: `${
-                      toDo.wellBeingTodo.isClickable ? "pointer" : ""
+                      toDo?.wellBeingTodo?.isClickable ? "pointer" : ""
                     }`,
                   }}
                   onClick={() => {
-                    if (toDo.wellBeingTodo.isClickable) {
+                    if (toDo?.wellBeingTodo?.isClickable) {
                       window.open(toDo.wellBeingTodo.url, "_blank");
                     }
                   }}
                 >
-                  {toDo.wellBeingTodo.label}
+                  {toDo?.wellBeingTodo?.label}
                 </div>
                 {renderToggle(toDo)}
               </div>
             </div>
+            )}
           </div>
         ))}
       </div>
