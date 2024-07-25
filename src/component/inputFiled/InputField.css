@@ -5,6 +5,9 @@
     background-color: #D9D9D9;
     cursor: pointer;
     border: 2px solid #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .formClass {
@@ -28,6 +31,7 @@
 }
 
 .input__box, .input__box_2 {
+    display: flex;
     padding-top: 10px;
     padding-bottom: 10px;
     padding-right: 10px;

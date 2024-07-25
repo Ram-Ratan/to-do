@@ -137,7 +137,6 @@ const ToDo: React.FC = () => {
   );
   const mainTodoRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
-  console.log(toDoList);
 
   const adjustWellBeingTodoPosition = (id: string) => {
     const mainTodoElement = mainTodoRefs.current.get(id);
