@@ -141,6 +141,7 @@ const ToDo: React.FC = () => {
 
   const adjustWellBeingTodoPosition = (id: string) => {
     const mainTodoElement = mainTodoRefs.current.get(id);
+    const listContainer = document.getElementById("#list");
     if (mainTodoElement) {
       const wellBeingElement = mainTodoElement.querySelector(
         ".wellBeingToDo"
@@ -164,7 +165,12 @@ const ToDo: React.FC = () => {
       if (toggleCircle) {
         const wellBeingHeight = wellBeingElement.offsetHeight
         toggleCircle.style.top = `${wellBeingHeight - wellBeingHeight / 2 - 11}px`; // Adjust based on height
+        mainTodoElement.style.marginBottom = `${wellBeingHeight - 53}px`
+        if(listContainer){
+          // listContainer.style.marginBottom = `${wellBeingHeight+10}px`;
+        }
       }
+      
     }
   };
 
@@ -290,7 +296,7 @@ const ToDo: React.FC = () => {
   return (
     <div>
       <h1 className="header-1">Create Your To Do List</h1>
-      <div className="list__container">
+      <div className="list__container" id = "#list">
         {toDoList?.map((toDo) => (
           <div
             ref={(el) => {
