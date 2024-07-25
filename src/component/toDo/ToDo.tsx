@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import InputField from "../inputFiled/InputField";
 import "./ToDo.css";
-import Triangle from "../../assets/triangle";
 import CustomToggle from "../cutomToggle/CustomToggle";
 export interface ToDoI {
   id: string;
   label: string;
   isDone: boolean;
-  wellBeingTodo: WellBeingTodo| undefined;
+  wellBeingTodo: WellBeingTodo | undefined;
 }
 
 type WellBeingTodo = {
@@ -128,21 +127,66 @@ const ToDo: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [toDoList, setToDoList] = useState<ToDoI[]>([]);
   const [isAdd, setIsAdd] = useState<boolean>(false);
-  const [animatingId, setAnimatingId] = useState<string | null>(null)
-  const [wellbeingToDoAnimatingId, setWellbeingToDoAnimatingId] = useState<string | null>(null);
+  const [animatingId, setAnimatingId] = useState<string | null>(null);
+  const [wellbeingToDoAnimatingId, setWellbeingToDoAnimatingId] = useState<
+    string | null
+  >(null);
   const [wobbleId, setWobbleId] = useState<string | null>(null);
-  const [usedWellBeingTodos, setUsedWellBeingTodos] = useState<WellBeingTodo[]>([]);
+  const [usedWellBeingTodos, setUsedWellBeingTodos] = useState<WellBeingTodo[]>(
+    []
+  );
+  const mainTodoRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+
   console.log(toDoList);
 
+  const adjustWellBeingTodoPosition = (id: string) => {
+    const mainTodoElement = mainTodoRefs.current.get(id);
+    if (mainTodoElement) {
+      const wellBeingElement = mainTodoElement.querySelector(
+        ".wellBeingToDo"
+      ) as HTMLDivElement;
+      const toggleCircle1 = mainTodoElement.querySelector(
+        ".outer__circle_1"
+      ) as HTMLDivElement;
+      const toggleCircle = mainTodoElement.querySelector(
+        ".outer__circle"
+      ) as HTMLDivElement;
+      if (wellBeingElement) {
+        const mainHeight = mainTodoElement.offsetHeight;
+        console.log(mainHeight);
+        wellBeingElement.style.top = `${mainHeight - 16}px`; // Adjust based on height
+      }
+
+      if (toggleCircle1) {
+        const mainHeight = mainTodoElement.offsetHeight;
+        toggleCircle1.style.top = `${mainHeight - mainHeight / 2 - 11}px`; // Adjust based on height
+      }
+      if (toggleCircle) {
+        const wellBeingHeight = wellBeingElement.offsetHeight
+        toggleCircle.style.top = `${wellBeingHeight - wellBeingHeight / 2 - 11}px`; // Adjust based on height
+      }
+    }
+  };
+
+  useEffect(() => {
+    // if (wellbeingToDoAnimatingId) {
+    adjustWellBeingTodoPosition(toDoList?.[toDoList.length - 1]?.id);
+    // }
+  }, [toDoList]);
+
   const getAvailableWellBeingTodos = () => {
-    const usedLabels = toDoList.map(todo => todo.wellBeingTodo?.label)?.filter((i)=> i!==null);
-    const unusedTodos = wellBeingTodo.filter(todo => !usedLabels.includes(todo.label));
-    
+    const usedLabels = toDoList
+      .map((todo) => todo.wellBeingTodo?.label)
+      ?.filter((i) => i !== null);
+    const unusedTodos = wellBeingTodo.filter(
+      (todo) => !usedLabels.includes(todo.label)
+    );
+
     if (unusedTodos.length === 0) {
       setUsedWellBeingTodos([]);
       return wellBeingTodo;
     }
-    
+
     return unusedTodos;
   };
 
@@ -150,7 +194,10 @@ const ToDo: React.FC = () => {
     e.preventDefault();
     if (inputValue) {
       const availableWellBeingTodos = getAvailableWellBeingTodos();
-      const randomWellBeingTodo = availableWellBeingTodos[Math.floor(Math.random() * availableWellBeingTodos.length)];
+      const randomWellBeingTodo =
+        availableWellBeingTodos[
+          Math.floor(Math.random() * availableWellBeingTodos.length)
+        ];
       setToDoList([
         ...toDoList,
         {
@@ -192,7 +239,7 @@ const ToDo: React.FC = () => {
 
   const handleRadioChange = (toDo: ToDoI): void => {
     setWellbeingToDoAnimatingId(toDo.id);
-    setTimeout(()=>{
+    setTimeout(() => {
       setToDoList(
         toDoList.map((todoItem) =>
           todoItem.id === toDo.id
@@ -200,9 +247,8 @@ const ToDo: React.FC = () => {
             : todoItem
         )
       );
-    }, 300)
+    }, 300);
   };
-
 
   const renderToggle = (toDo: ToDoI): JSX.Element => {
     return (
@@ -216,58 +262,98 @@ const ToDo: React.FC = () => {
     );
   };
 
+  const renderCutomToggle = ({
+    isChecked,
+    onClickToggle,
+    variant,
+  }: {
+    isChecked: boolean;
+    onClickToggle: any;
+    variant: string;
+  }) => {
+    return (
+      <div
+        className={`${variant === "big" ? "outer__circle_1" : "outer__circle"}`}
+        onClick={onClickToggle}
+      >
+        {isChecked && (
+          <div
+            className={`${
+              variant === "big" ? "inner__circle_1" : "inner__circle"
+            }`}
+          ></div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div>
       <h1 className="header-1">Create Your To Do List</h1>
       <div className="list__container">
         {toDoList?.map((toDo) => (
           <div
+            ref={(el) => {
+              if (el) mainTodoRefs.current.set(toDo.id, el);
+            }}
             style={{ position: "relative" }}
-            className={`todo-item ${animatingId === toDo.id ? "fade-out-main" : ""}`}
+            className={`todo-item ${
+              animatingId === toDo.id ? "fade-out-main" : ""
+            }`}
             key={toDo.id}
           >
             <div className="input__box">{toDo.label}</div>
-            <CustomToggle
+            {renderCutomToggle({
+              isChecked: toDo.isDone,
+              onClickToggle: () => {
+                handleCheck(toDo?.id);
+              },
+              variant: "big",
+            })}
+            {/* <CustomToggle
               isChecked={toDo.isDone}
               onClickToggle={() => {
                 handleCheck(toDo?.id);
               }}
               variant={"big"}
-            />
+            /> */}
             {toDo.wellBeingTodo && (
               <div
-              style={{
-                position: "absolute",
-                left: "46px",
-                top: "46px",
-              }}
-              className={`wellBeingToDo ${wellbeingToDoAnimatingId === toDo.id? "fade-out-wellbeing":""}`}
-            >
-              <div
-                style={{ position: "relative" }}
-                className={wobbleId === toDo.id ? "quick-wobble" : ""}
+                style={{
+                  position: "absolute",
+                  left: "46px",
+                }}
+                className={`wellBeingToDo ${
+                  wellbeingToDoAnimatingId === toDo.id
+                    ? "fade-out-wellbeing"
+                    : ""
+                }`}
               >
                 <div
-                  className="input__box_2"
-                  style={{
-                    textDecoration: `${
-                      toDo?.wellBeingTodo?.isClickable ? "underline" : ""
-                    }`,
-                    cursor: `${
-                      toDo?.wellBeingTodo?.isClickable ? "pointer" : ""
-                    }`,
-                  }}
-                  onClick={() => {
-                    if (toDo?.wellBeingTodo?.isClickable) {
-                      window.open(toDo.wellBeingTodo.url, "_blank");
-                    }
-                  }}
+                  style={{ position: "relative" }}
+                  className={wobbleId === toDo.id ? "quick-wobble" : ""}
                 >
-                  {toDo?.wellBeingTodo?.label}
+                  <div
+                    className="input__box_2"
+                    style={{
+                      textDecoration: `${
+                        toDo?.wellBeingTodo?.isClickable ? "underline" : ""
+                      }`,
+                      cursor: `${
+                        toDo?.wellBeingTodo?.isClickable ? "pointer" : ""
+                      }`,
+                    }}
+                    onClick={() => {
+                      if (toDo?.wellBeingTodo?.isClickable) {
+                        window.open(toDo.wellBeingTodo.url, "_blank");
+                      }
+                    }}
+                  >
+                    {toDo?.wellBeingTodo?.label}
+                  </div>
+                  {renderToggle(toDo)}
                 </div>
-                {renderToggle(toDo)}
               </div>
-            </div>
             )}
           </div>
         ))}
